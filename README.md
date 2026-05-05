@@ -39,5 +39,11 @@ Ver el archivo `README.md` para detalles completos de la estructura.
 4. Push a la rama
 5. Crear Pull Request
 
+## Responsabilidades del equipo
+- **Homero (Líder)**: arquitectura general, estructura Django y apps, revisión de código y despliegue.
+- **Carlos (Backend)**: diseño de modelos, lógica de turnos, validaciones, reportes y permisos.
+- **Juan (Frontend + UX)**: flujos de paciente, interacción con HTMX, experiencia de usuario y usabilidad.
+- **Sebastián (UI + Diseño)**: diseño visual, Tailwind CSS, accesibilidad y componentes reutilizables.
+
 ## Licencia
 Este proyecto está bajo la Licencia MIT.

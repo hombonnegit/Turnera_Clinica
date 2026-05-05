@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Especialidad, Medico, Turno
+from .models import Medico
 
 
 def sacar_turno(request):

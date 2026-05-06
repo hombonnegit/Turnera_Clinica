@@ -1,35 +1,114 @@
-<!-- Formulario de Turnos: UX de 3 Clics -->
-<div class="max-w-md mx-auto bg-white shadow-xl rounded-2xl p-8 font-sans border border-gray-100">
-    <h2 class="text-3xl font-extrabold text-indigo-700 mb-6 text-center">Reserva tu Turno</h2>
+{% extends "base.html" %}
 
-    <div class="mb-8">
-        <label class="block text-sm font-bold text-gray-600 uppercase tracking-wider mb-3">1. Elegí Especialidad</label>
-        <select name="especialidad" 
-                class="w-full p-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-0 transition-all"
-                hx-get="/buscar-medicos/" 
-                hx-target="#seccion-medicos"
-                hx-indicator="#loading">
-            <option value="">Seleccionar...</option>
-            <option value="clinica">Médico de Cabecera</option>
-            <option value="pediatria">Pediatría</option>
-            <option value="kinesiologia">Kinesiología</option>
-        </select>
-    </div>
+{% block title %}Reservar Turno - Clínica{% endblock %}
 
-    <div id="seccion-medicos" class="mb-8 text-center italic text-gray-400 py-4 border-2 border-dashed border-gray-100 rounded-xl">
-        Acá aparecerán los profesionales disponibles
-    </div>
-
-    <div id="paso-final" class="hidden">
-        <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-xl shadow-lg transition-all text-lg transform active:scale-95">
-            CONFIRMAR TURNO
-        </button>
-    </div>
-
-    <div id="loading" class="htmx-indicator flex justify-center mt-4">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-700"></div>
+{% block content %}
+<div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-4">Reserva tu Turno</h1>
+        <p class="text-lg opacity-90">Sistema rápido y seguro para agendar con profesionales</p>
     </div>
 </div>
 
-<script src="https://unpkg.com/htmx.org@1.9.10"></script>
-<script src="https://cdn.tailwindcss.com"></script>
+<div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Columna principal: Formulario -->
+        <div class="md:col-span-2">
+            <div class="bg-white shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Reserva en 3 pasos</h2>
+
+                <!-- Paso 1: Especialidad -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-3">1</div>
+                        <label class="text-lg font-bold text-gray-700">Elige tu Especialidad</label>
+                    </div>
+                    <select id="especialidad" class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-0 text-lg">
+                        <option value="">-- Seleccionar especialidad --</option>
+                        {% for esp in especialidades %}
+                            <option value="{{ esp.nombre }}">{{ esp.nombre|upper }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Paso 2: Médico -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-3">2</div>
+                        <label class="text-lg font-bold text-gray-700">Elige tu Médico</label>
+                    </div>
+                    <div id="medicos-container" class="p-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
+                        Selecciona una especialidad primero
+                    </div>
+                </div>
+
+                <!-- Paso 3: Confirmar -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-3">3</div>
+                        <label class="text-lg font-bold text-gray-700">Confirmar</label>
+                    </div>
+                    <a href="{% url 'pacientes:crear_turno' %}" class="w-full block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg shadow-lg transform hover:scale-105 transition-all text-lg">
+                        → Continuar con la Reserva
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna lateral: Información -->
+        <div>
+            <!-- Card: Rápido -->
+            <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+                <div class="text-3xl mb-2">⚡</div>
+                <h3 class="font-bold text-gray-800 mb-2">Rápido</h3>
+                <p class="text-gray-600 text-sm">Reserva en menos de 2 minutos</p>
+            </div>
+
+            <!-- Card: Seguro -->
+            <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+                <div class="text-3xl mb-2">🔒</div>
+                <h3 class="font-bold text-gray-800 mb-2">Seguro</h3>
+                <p class="text-gray-600 text-sm">Tus datos están protegidos</p>
+            </div>
+
+            <!-- Card: Confirmación -->
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <div class="text-3xl mb-2">✅</div>
+                <h3 class="font-bold text-gray-800 mb-2">Confirmado</h3>
+                <p class="text-gray-600 text-sm">Recibirás confirmación por email</p>
+            </div>
+
+            <!-- Banner importante -->
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded mt-6">
+                <p class="text-green-800 text-sm font-semibold">
+                    <strong>¿Paciente nuevo?</strong><br>
+                    <a href="{% url 'pacientes:registrar_paciente' %}" class="text-green-600 hover:underline">Registrate aquí primero</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('especialidad').addEventListener('change', function() {
+        const especialidad = this.value;
+        const container = document.getElementById('medicos-container');
+        
+        if (!especialidad) {
+            container.innerHTML = 'Selecciona una especialidad primero';
+            return;
+        }
+
+        fetch(`/buscar-medicos/?especialidad=${especialidad}`)
+            .then(response => response.json())
+            .then(data => {
+                container.innerHTML = data.html;
+                // Aplicar estilos al select generado
+                const select = container.querySelector('select');
+                if (select) {
+                    select.className += ' text-lg';
+                }
+            });
+    });
+</script>
+{% endblock %}

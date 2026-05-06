@@ -3,21 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Clínica de Turnos{% endblock %}</title>
+    <title>{% block title %}Clínica de Turnos - Sistema de Gestión Médica{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a',
+                        secondary: '#1e293b',
+                        accent: '#0ea5e9',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f8fafc;
+        }
+        .btn-primary {
+            @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+        }
+        .btn-secondary {
+            @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg transition-all duration-200;
+        }
+        .card {
+            @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200;
+        }
+        .input-field {
+            @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200;
+        }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-gray-50">
+<body class="bg-slate-50">
     {% include 'navbar.html' %}
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="min-h-screen">
         {% block content %}{% endblock %}
     </main>
 
     {% include 'footer.html' %}
 
-    <script src="{% static 'js/htmx.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>

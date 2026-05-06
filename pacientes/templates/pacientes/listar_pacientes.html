@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Pacientes - Clínica{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Gestión de Pacientes</h2>
+        <a href="{% url 'pacientes:registrar_paciente' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg">
+            + Nuevo Paciente
+        </a>
+    </div>
+
+    <!-- Buscador -->
+    <div class="mb-6">
+        <form method="get" class="flex gap-2">
+            <input type="text" name="q" value="{{ search }}" placeholder="Buscar por nombre, apellido o DNI..." 
+                   class="flex-1 p-3 border-2 border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-0">
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg">
+                Buscar
+            </button>
+        </form>
+    </div>
+
+    {% if pacientes %}
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-indigo-600 text-white">
+                    <tr>
+                        <th class="px-6 py-3 text-left">Nombre</th>
+                        <th class="px-6 py-3 text-left">DNI</th>
+                        <th class="px-6 py-3 text-left">Teléfono</th>
+                        <th class="px-6 py-3 text-left">Obra Social</th>
+                        <th class="px-6 py-3 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for paciente in pacientes %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-800">{{ paciente.nombre }} {{ paciente.apellido }}</td>
+                            <td class="px-6 py-4 text-gray-600">{{ paciente.dni }}</td>
+                            <td class="px-6 py-4 text-gray-600">{{ paciente.telefono }}</td>
+                            <td class="px-6 py-4 text-gray-600">{{ paciente.obra_social|default:"—" }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <a href="{% url 'pacientes:detalle_paciente' paciente.pk %}" class="text-indigo-600 hover:text-indigo-800 font-semibold">
+                                    Ver
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+            <p class="text-yellow-800">{% if search %}No se encontraron pacientes con "{{ search }}"{% else %}No hay pacientes registrados{% endif %}</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

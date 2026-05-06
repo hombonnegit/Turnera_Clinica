@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Clínica de Turnos{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-4">Bienvenido a Clínica de Turnos</h1>
+        <p class="text-lg opacity-90">Gestión profesional de citas médicas y pacientes</p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-12">
+    <!-- Opciones principales -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <!-- Registrar Paciente -->
+        <div class="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow">
+            <div class="text-4xl mb-4">👤</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Registrar Paciente</h3>
+            <p class="text-gray-600 mb-4">Agrrega un nuevo paciente al sistema con todos sus datos.</p>
+            <a href="{% url 'pacientes:registrar_paciente' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                Ir →
+            </a>
+        </div>
+
+        <!-- Ver Pacientes -->
+        <div class="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow">
+            <div class="text-4xl mb-4">📋</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Ver Pacientes</h3>
+            <p class="text-gray-600 mb-4">Consulta la lista de todos los pacientes registrados.</p>
+            <a href="{% url 'pacientes:listar_pacientes' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                Ir →
+            </a>
+        </div>
+
+        <!-- Gestionar Turnos -->
+        <div class="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow">
+            <div class="text-4xl mb-4">📅</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Gestionar Turnos</h3>
+            <p class="text-gray-600 mb-4">Crea y administra los turnos de los pacientes.</p>
+            <a href="{% url 'pacientes:listar_turnos' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                Ir →
+            </a>
+        </div>
+    </div>
+
+    <!-- Formulario rápido de reserva -->
+    <div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Reserva de Turno Rápida</h2>
+        
+        <form id="quick-booking" class="space-y-4 max-w-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Especialidad</label>
+                    <select id="especialidad" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-0">
+                        <option value="">Seleccionar especialidad...</option>
+                        <option value="clinica">Médico de Cabecera</option>
+                        <option value="pediatria">Pediatría</option>
+                        <option value="kinesiologia">Kinesiología</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Médico</label>
+                    <select id="medico" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-0 disabled:opacity-50" disabled>
+                        <option value="">Seleccionar médico...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha</label>
+                    <input type="date" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-0">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Hora</label>
+                    <input type="time" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-0">
+                </div>
+            </div>
+
+            <a href="{% url 'pacientes:crear_turno' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+                Crear Turno →
+            </a>
+        </form>
+
+        <script>
+            document.getElementById('especialidad').addEventListener('change', function() {
+                const especialidad = this.value;
+                const medicoSelect = document.getElementById('medico');
+                
+                if (!especialidad) {
+                    medicoSelect.disabled = true;
+                    medicoSelect.innerHTML = '<option value="">Seleccionar médico...</option>';
+                    return;
+                }
+
+                fetch(`/buscar-medicos/?especialidad=${especialidad}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        medicoSelect.innerHTML = data.html;
+                        medicoSelect.disabled = false;
+                    });
+            });
+        </script>
+    </div>
+
+    <!-- Información -->
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded">
+        <h3 class="text-lg font-bold text-blue-800 mb-2">💡 Tip</h3>
+        <p class="text-blue-700">Usa el panel de administración (/admin/) con usuario <strong>admin</strong> y contraseña <strong>admin123</strong> para gestionar datos en profundidad.</p>
+    </div>
+</div>
+{% endblock %}
